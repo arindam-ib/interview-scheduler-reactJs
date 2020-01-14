@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 // import logo from './logo.svg';
-import Interview from './Interview.js';
-import NewInterview from './NewInterview.js';
-import Home from './Home.js';
-import Show from './Show.js';
-import Edit from './Edit.js';
-import Navbar from './Navbar';
 import {connect} from 'react-redux';
 import axios from 'axios';
 import { BrowserRouter, Route } from 'react-router-dom';
+import Interview from './components/Interview.js';
+import NewInterview from './components/NewInterview.js';
+import Home from './components/Home.js';
+import Show from './components/Show.js';
+import Edit from './components/Edit.js';
+import Navbar from './components/Navbar';
 //import './App.css';
 
 
