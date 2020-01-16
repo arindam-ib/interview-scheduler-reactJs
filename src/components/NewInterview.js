@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 // import logo from './logo.svg';
 //import './App.css';
-import axios from 'axios';
-import {connect} from 'react-redux';
-import { createInterviewAction } from "../actions/createInterviewAction.js";
+import { inject, observer } from "mobx-react";
 
-
+@inject("InterviewStore")
+@observer
 class NewInterview extends Component {
 
   handleSubmit = (e) => {
@@ -14,18 +13,8 @@ class NewInterview extends Component {
     let starttime = e.target.elements.starttime.value;
     let endtime = e.target.elements.endtime.value;
     let participant_ids = e.target.elements.participant_ids.value;
-    this.props.dispatch(
-      createInterviewAction(title, starttime, endtime, participant_ids.split(","))
-    );
+    this.props.InterviewStore.createInterview(title, starttime, endtime, participant_ids.split(","))
     this.props.history.push('/interviews');
-    // axios.post('http://localhost:3003/interviews', {'title': title, 'starttime': starttime, 'endtime': endtime, 'participant_ids': participant_ids.split(",")})
-    // .then((res) => {
-    //   console.log("HO");
-    //   console.log(res);
-    //   console.log(res.data);
-    //   this.props.createInterview(res.data);
-    //   this.props.history.push('/interviews');
-    // })
   }
 
   render() {
@@ -48,20 +37,5 @@ class NewInterview extends Component {
   }
 }
 
-
-const mapStateToProps = (state) => {
-  return {
-    interviews: state.interviews
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    // createInterview: (data)=> {
-    //   dispatch({type: 'CREATE_INTERVIEW', data: data})
-    // }
-  }
-}
-
 // export default connect(mapStateToProps, mapDispatchToProps)(NewInterview);
-export default connect(mapStateToProps)(NewInterview);
+export default NewInterview;

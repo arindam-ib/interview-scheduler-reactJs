@@ -1,30 +1,17 @@
 import React, {Component} from 'react';
-// import logo from './logo.svg';
-//import './App.css';
-// import axios from 'axios';
-import {connect} from 'react-redux';
+import { inject, observer } from "mobx-react";
 
+@inject("InterviewStore")
+@observer
 class Show extends Component {
 
-  // state = {
-  //   interview: null
-  // }
-  //
-  // componentDidMount() {
-  //   let id = this.props.match.params.id;
-  //   axios.get('http://localhost:3003/interviews/'+id.toString())
-  //   .then(res => {
-  //     console.log(res.data)
-  //     this.setState({
-  //       interview: res.data
-  //     })
-  //   })
-  // }
-
   render() {
-    if(this.props.interview != null)
+    let id = this.props.match.params.id;
+    const interview = this.props.InterviewStore.interviews.find(
+      interview => interview.id.toString() === id.toString()
+    );
+    if(interview != null)
     {
-      const interview = this.props.interview;
       const participantList = interview.participants.length ? (
         interview.participants.map(participant => {
           return(
@@ -56,11 +43,4 @@ class Show extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  let id = ownProps.match.params.id;
-  return {
-    interview: state.interviews.find(interview => interview.id.toString() === id.toString())
-  }
-}
-
-export default connect(mapStateToProps)(Show);
+export default Show;

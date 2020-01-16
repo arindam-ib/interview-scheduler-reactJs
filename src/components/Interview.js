@@ -1,43 +1,20 @@
 import React, {Component} from 'react';
 // import logo from './logo.svg';
 //import './App.css';
-import axios from 'axios';
 import {Link} from 'react-router-dom';
-import {connect} from 'react-redux';
-import { deleteInterviewAction } from '../actions/deleteInterviewAction.js';
+import { inject, observer } from "mobx-react";
 
+@inject("InterviewStore")
+@observer
 class Interview extends Component {
 
-  // state = {
-  //   interviews: [ ]
-  // }
-  //
-  // componentDidMount() {
-  //   axios.get('http://localhost:3003/interviews')
-  //   .then(res => {
-  //     console.log(res.data)
-  //     this.setState({
-  //       interviews: res.data //[{'id': 2, 'title': 'abc', 'starttime': 'asd', 'endtime': 'erg', 'participants': 'asdsdfdsf'}]
-  //     })
-  //   })
-  // }
-
   onDeleteClick = (id) => {
-    // axios.delete('http://localhost:3003/interviews/'+id.toString())
-    // .then(res => {
-    //   axios.get('http://localhost:3003/interviews')
-    //   .then(res => {
-    //     //console.log(res.data)
-    //     this.props.deleteInterview(id);
-    //     this.props.history.push('/interviews');
-    //   })
-    // })
-    this.props.dispatch(deleteInterviewAction(id.toString()));
+    this.props.InterviewStore.deleteInterview(id.toString());
     this.props.history.push('/interviews');
   }
 
   render() {
-    const {interviews} = this.props;
+    const {interviews} = this.props.InterviewStore;
     const interviewList = interviews.length ? (
       Object.keys(interviews).map((key) => {
         const participantList = interviews[key].participants.length ? (
@@ -77,19 +54,4 @@ class Interview extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    interviews: state.interviews
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    // deleteInterview: (id)=> {
-    //   dispatch({type: 'DELETE_INTERVIEW', id: id})
-    // }
-  }
-}
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Interview);
-export default connect(mapStateToProps)(Interview);
+export default Interview;

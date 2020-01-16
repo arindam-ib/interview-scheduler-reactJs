@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 // import logo from './logo.svg';
 //import './App.css';
-import axios from 'axios';
-import {connect} from 'react-redux';
-import { editInterviewAction } from '../actions/editInterviewAction.js';
+import { inject, observer } from "mobx-react";
 
-
+@inject("InterviewStore")
+@observer
 class Edit extends Component {
   state = {
     title: "",
@@ -14,30 +13,18 @@ class Edit extends Component {
     participant_ids: ""
   }
 
-  // componentDidMount() {
-  //   let id = this.props.match.params.id;
-  //   axios.get('http://localhost:3003/interviews/'+id.toString())
-  //   .then(res => {
-  //     console.log(res.data)
-  //     let participants = "";
-  //     for(var i=0;i<res.data.participants.length;i++) participants+=","+res.data.participants[i].email;
-  //     participants = participants.slice(1);
-  //     this.setState({
-  //       title: res.data.title,
-  //       starttime: res.data.starttime,
-  //       endtime: res.data.endtime,
-  //       participant_ids: participants
-  //     })
-  //   })
-  // }
   componentDidMount() {
     let participants = "";
-    for(var i=0;i<this.props.interview.participants.length;i++) participants+=","+this.props.interview.participants[i].email;
+    let id = this.props.match.params.id;
+    const interview = this.props.InterviewStore.interviews.find(
+      interview => interview.id.toString() === id.toString()
+    );
+    for(var i=0;i<interview.participants.length;i++) participants+=","+interview.participants[i].email;
     participants = participants.slice(1);
     this.setState({
-      title: this.props.interview.title,
-      starttime: this.props.interview.starttime,
-      endtime: this.props.interview.endtime,
+      title: interview.title,
+      starttime: interview.starttime,
+      endtime: interview.endtime,
       participant_ids: participants,
     })
   }
@@ -57,20 +44,15 @@ class Edit extends Component {
     let endtime = e.target.elements.endtime.value;
     let participant_ids = e.target.elements.participant_ids.value;
     console.log(this.state);
-    this.props.dispatch(
-      editInterviewAction(this.props.match.params.id.toString(), title, starttime, endtime, participant_ids.split(","))
-    );
+    this.props.InterviewStore.editInterview(this.props.match.params.id.toString(), title, starttime, endtime, participant_ids.split(","));
     this.props.history.push('/interviews');
-    // axios.put('http://localhost:3003/interviews/'+this.props.match.params.id.toString(), {'title': title, 'starttime': starttime, 'endtime': endtime, 'participant_ids': participant_ids.split(",")})
-    // .then(res => {
-    //   console.log(res.data);
-    //   this.props.editInterview(res.data);
-    //   this.props.history.push('/interviews');
-    // })
   }
 
   render() {
-    const interview = this.props.interview;
+    let id = this.props.match.params.id;
+    const interview = this.props.InterviewStore.interviews.find(
+      interview => interview.id.toString() === id.toString()
+    );
     if(interview==null)
     {
       return (
@@ -99,20 +81,5 @@ class Edit extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  let id = ownProps.match.params.id;
-  return {
-    interview: state.interviews.find(interview => interview.id.toString() === id.toString())
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    // editInterview: (data)=> {
-    //   dispatch({type: 'EDIT_INTERVIEW', data: data})
-    // }
-  }
-}
-
 // export default connect(mapStateToProps, mapDispatchToProps)(Edit);
-export default connect(mapStateToProps)(Edit);
+export default Edit;

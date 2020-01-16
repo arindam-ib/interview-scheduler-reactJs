@@ -1,30 +1,20 @@
 import React, {Component} from 'react';
 // import logo from './logo.svg';
-import {connect} from 'react-redux';
-import axios from 'axios';
 import { BrowserRouter, Route } from 'react-router-dom';
+import { inject, observer } from "mobx-react";
 import Interview from './components/Interview.js';
 import NewInterview from './components/NewInterview.js';
 import Home from './components/Home.js';
 import Show from './components/Show.js';
 import Edit from './components/Edit.js';
 import Navbar from './components/Navbar';
-import { fetchInterviewsAction } from './actions/fetchInterviewsAction.js'
-//import './App.css';
 
-
+@inject("InterviewStore")
+@observer
 class App extends Component {
 
-  // componentDidMount() {
-  //   axios.get('http://localhost:3003/interviews')
-  //   .then(res => {
-  //     console.log(res.data)
-  //     this.props.fetchAllData(res.data);
-  //   })
-  // }
-
   componentDidMount = () => {
-    this.props.dispatch(fetchInterviewsAction());
+    this.props.InterviewStore.fetchInterviews();
   };
 
   render() {
@@ -44,21 +34,4 @@ class App extends Component {
   }
 }
 
-
-
-const mapStateToProps = (state) => {
-  return {
-
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    // fetchAllData: (data)=> {
-    //   dispatch({type: 'FETCH', data: data})
-    // }
-  }
-}
-
-// export default connect(mapStateToProps, mapDispatchToProps)(App);
-export default connect(mapStateToProps)(App);
+export default App;
