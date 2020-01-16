@@ -9,18 +9,23 @@ import Home from './components/Home.js';
 import Show from './components/Show.js';
 import Edit from './components/Edit.js';
 import Navbar from './components/Navbar';
+import { fetchInterviewsAction } from './actions/fetchInterviewsAction.js'
 //import './App.css';
 
 
 class App extends Component {
 
-  componentDidMount() {
-    axios.get('http://localhost:3003/interviews')
-    .then(res => {
-      console.log(res.data)
-      this.props.fetchAllData(res.data);
-    })
-  }
+  // componentDidMount() {
+  //   axios.get('http://localhost:3003/interviews')
+  //   .then(res => {
+  //     console.log(res.data)
+  //     this.props.fetchAllData(res.data);
+  //   })
+  // }
+
+  componentDidMount = () => {
+    this.props.dispatch(fetchInterviewsAction());
+  };
 
   render() {
     return (
@@ -49,10 +54,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchAllData: (data)=> {
-      dispatch({type: 'FETCH', data: data})
-    }
+    // fetchAllData: (data)=> {
+    //   dispatch({type: 'FETCH', data: data})
+    // }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+// export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);

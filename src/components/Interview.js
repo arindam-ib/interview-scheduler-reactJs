@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
+import { deleteInterviewAction } from '../actions/deleteInterviewAction.js';
 
 class Interview extends Component {
 
@@ -22,15 +23,17 @@ class Interview extends Component {
   // }
 
   onDeleteClick = (id) => {
-    axios.delete('http://localhost:3003/interviews/'+id.toString())
-    .then(res => {
-      axios.get('http://localhost:3003/interviews')
-      .then(res => {
-        //console.log(res.data)
-        this.props.deleteInterview(id);
-        this.props.history.push('/interviews');
-      })
-    })
+    // axios.delete('http://localhost:3003/interviews/'+id.toString())
+    // .then(res => {
+    //   axios.get('http://localhost:3003/interviews')
+    //   .then(res => {
+    //     //console.log(res.data)
+    //     this.props.deleteInterview(id);
+    //     this.props.history.push('/interviews');
+    //   })
+    // })
+    this.props.dispatch(deleteInterviewAction(id.toString()));
+    this.props.history.push('/interviews');
   }
 
   render() {
@@ -82,10 +85,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteInterview: (id)=> {
-      dispatch({type: 'DELETE_INTERVIEW', id: id})
-    }
+    // deleteInterview: (id)=> {
+    //   dispatch({type: 'DELETE_INTERVIEW', id: id})
+    // }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Interview);
+// export default connect(mapStateToProps, mapDispatchToProps)(Interview);
+export default connect(mapStateToProps)(Interview);

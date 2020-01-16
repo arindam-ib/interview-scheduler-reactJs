@@ -4,52 +4,41 @@ const initState = {
   interviews: []
 }
 
-const rootReducer = (state=initState, action) => {
-  console.log(action);
-  if(action.type==='DELETE_INTERVIEW')
-  {
-    let newInterviews = state.interviews.filter(interview => {
-      return action.id.toString() !== interview.id.toString()
-    });
-    return {
-      ...state,
-      interviews: newInterviews
-    }
-  }
-
-  if(action.type==='FETCH')
-  {
+const rootReducer = (state = initState, action) => {
+  if (action.type === "FETCH_INTERVIEWS") {
     return {
       ...state,
       interviews: action.data
-    }
-  }
-
-  if(action.type==='CREATE_INTERVIEW')
-  {
-    let interviews = state.interviews;
-    interviews.push(action.data);
-    console.log(interviews);
-    return {
-      ...state,
-      interviews: interviews
-    }
-  }
-
-  if(action.type==='EDIT_INTERVIEW')
-  {
-    let interviews = state.interviews;
-    let newInterviews = interviews.filter(interview => {
-      return action.data.id.toString() !== interview.id.toString()
-    });
+    };
+  } else if (action.type === "NEW_INTERVIEW") {
+    let newInterviews = state.interviews;
     newInterviews.push(action.data);
     return {
       ...state,
       interviews: newInterviews
-    }
+    };
+  } else if (action.type === "EDIT_INTERVIEW") {
+    // console.log(action.data);
+    let newInterviews = state.interviews;
+    newInterviews = newInterviews.filter(
+        interview => interview.id.toString() !== action.id.toString()
+    );
+    newInterviews.push(action.data);
+    return {
+      ...state,
+      interviews: newInterviews
+    };
+  } else if (action.type === "DELETE_INTERVIEW") {
+    let newInterviews = state.interviews;
+    newInterviews = newInterviews.filter(
+      interview => interview.id.toString() !== action.id.toString()
+    );
+    return {
+      ...state,
+      interviews: newInterviews
+    };
   }
-
   return state;
-}
+};
 
 export default rootReducer;

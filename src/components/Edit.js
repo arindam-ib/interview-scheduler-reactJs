@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 //import './App.css';
 import axios from 'axios';
 import {connect} from 'react-redux';
+import { editInterviewAction } from '../actions/editInterviewAction.js';
 
 
 class Edit extends Component {
@@ -56,12 +57,16 @@ class Edit extends Component {
     let endtime = e.target.elements.endtime.value;
     let participant_ids = e.target.elements.participant_ids.value;
     console.log(this.state);
-    axios.put('http://localhost:3003/interviews/'+this.props.match.params.id.toString(), {'title': title, 'starttime': starttime, 'endtime': endtime, 'participant_ids': participant_ids.split(",")})
-    .then(res => {
-      console.log(res.data);
-      this.props.editInterview(res.data);
-      this.props.history.push('/interviews');
-    })
+    this.props.dispatch(
+      editInterviewAction(this.props.match.params.id.toString(), title, starttime, endtime, participant_ids.split(","))
+    );
+    this.props.history.push('/interviews');
+    // axios.put('http://localhost:3003/interviews/'+this.props.match.params.id.toString(), {'title': title, 'starttime': starttime, 'endtime': endtime, 'participant_ids': participant_ids.split(",")})
+    // .then(res => {
+    //   console.log(res.data);
+    //   this.props.editInterview(res.data);
+    //   this.props.history.push('/interviews');
+    // })
   }
 
   render() {
@@ -103,10 +108,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    editInterview: (data)=> {
-      dispatch({type: 'EDIT_INTERVIEW', data: data})
-    }
+    // editInterview: (data)=> {
+    //   dispatch({type: 'EDIT_INTERVIEW', data: data})
+    // }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Edit);
+// export default connect(mapStateToProps, mapDispatchToProps)(Edit);
+export default connect(mapStateToProps)(Edit);
