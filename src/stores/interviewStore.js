@@ -2,7 +2,7 @@ import { observable, action } from "mobx";
 
 class InterviewStore {
   @observable interviews = [];
-  //  fetch all the interviews
+
   @action fetchInterviews = () => {
     fetch("http://localhost:3003/interviews")
       .then(results => {
@@ -14,7 +14,6 @@ class InterviewStore {
       });
   };
 
-  // Create an interview
   @action createInterview = (title, starttime, endtime, participant_ids) => {
     let data = JSON.stringify({
       title: title,
@@ -29,13 +28,11 @@ class InterviewStore {
         "Content-Type": "application/json"
       },
       body: data
-    })
-      .then(response => response.json())
+    }).then(response => response.json())
       .then(data => {
         if (data.code === 3000) {
           alert("There is an overlap in date and time");
         } else {
-          // actually create interview in store
           this.interviews.push(data);
           alert("The Interview is created");
         }
@@ -44,24 +41,21 @@ class InterviewStore {
         alert("Error:", error);
       });
   };
-  //   Delete an Interview
+
   @action deleteInterview = (id) => {
     let url = "http://localhost:3003/interviews/" + id;
     fetch(url, {
       method: "DELETE",
       headers: { "content-type": "application/json" }
-    })
-      .then(res => {
+    }).then(res => {
         console.log(res.json());
-        // actually delete the interview from store
         this.interviews = this.interviews.filter(
           interview => interview.id.toString() !== id.toString()
         );
-      }) // OR res.json()
+      })
       .then(res => console.log(res));
   };
 
-  //   Edit an interview
   @action editInterview = (id, title, starttime, endtime, participant_ids) => {
     let data = JSON.stringify({
       title: title,
@@ -76,8 +70,7 @@ class InterviewStore {
         "Content-Type": "application/json"
       },
       body: data
-    })
-      .then(response => response.json())
+    }).then(response => response.json())
       .then(data => {
         if (data.code === 3000) {
           alert("There is an overlap in date and time");
